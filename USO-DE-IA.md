@@ -1,3 +1,5 @@
+# Uso por: Bernardo
+
 # Objetivo
 Desenvolver respostas para perguntas referentes ao CentOS
 
@@ -75,3 +77,48 @@ Porque incidentes de segurança geram necessidade urgente de espaço, algo que n
 **Qual é o risco de manter o SSH na porta 22 com autenticação por senha?**
 
 O maior risco está na autenticação por senha: ela é vulnerável a brute-force, dictionary attacks, credential stuffing e phishing, e não permite aplicar MFA de forma nativa e forte. Isso já seria um problema em qualquer porta, mas manter o serviço na porta padrão piora o cenário, porque é o primeiro alvo de scanners e botnets varrendo a internet o tempo todo. Trocar a porta não é uma proteção real, apenas reduz o ruído de ataques automatizados.
+
+============================================================================================
+
+# Uso por: Rafael
+
+# Objetivo
+
+Corrigir erro durante criação do Script
+
+## Prompt: 
+
+"Olá. Estou desenvolvendo um script e percebi um erro nele. Quero entender e saber como corrigir.
+O set -euo pipefail está sendo habilitado, e a função:
+uso_help(){
+        echo "Script verificador de baseline CIS"
+        echo "Uso excusivo para usuários root, por questões de segurança"
+        echo "Uso para verificar configurações do sistema, inspirado no CIS."
+        echo " -h, --help Mostra esta ajuda"
+}
+case "$1" in
+        -h|--help)
+                uso_help
+                ;;
+        *)
+                ;;
+esac
+é chamada como verificação do argumento. Porem, a saída:
+fael@BOOK-JMIOCV22RU:~/Testes$ ./script.sh
+./script.sh: line 38: $1: unbound variable
+fael@BOOK-JMIOCV22RU:~/Testes$"
+
+## Resultado:
+
+O erro acontece por causa do set -u (nounset).
+Quando você executa o script sem nenhum argumento (./script.sh), a variável posicional $1 não existe. Com set -u ativado, qualquer referência a uma variável não definida gera exatamente este erro:
+Bash./script.sh: line 38: $1: unbound variable
+Como corrigir
+A forma mais limpa e idiomática é usar a expansão com valor padrão vazio:
+Bashcase "${1:-}" in
+    -h|--help)
+        uso_help
+        ;;
+    *)
+        ;;
+esac
