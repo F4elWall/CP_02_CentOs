@@ -204,20 +204,26 @@ sudo semanage port -l | grep ssh
 Causa: tentativa de conectar diretamente ao IP interno do NAT (`10.0.2.15`) a partir do host físico. Esse IP só existe dentro da rede virtual do VirtualBox; o host não tem rota até ele.
 Solução: conectar via `127.0.0.1` (do próprio host onde a VM roda), usando a regra de Port Forwarding do VirtualBox:
 ssh -i ~/.ssh/id_ed25519 -p 2222 usuario@127.0.0.1
+
+
 11.2 Amigo/colega de outra máquina não consegue conectar
 Causa: `127.0.0.1` só é válido na mesma máquina física onde o VirtualBox está rodando. Uma segunda camada de redirecionamento é necessária.
 Solução: configurar Port Forwarding também no roteador de casa, apontando para o IP local do host Windows (ver seção 9). Testado com sucesso após:
 Reserva de DHCP de IP `específico` no roteador
 Regra de redirecionamento de porta `2222` TCP no roteador (Vivo Fibra, painel em `192.168.15.1`)
 Regra de entrada liberando a porta `2222` no Firewall do Windows
-11.4 `sshd -t` reporta erro de sintaxe após editar `sshd_config`
+11.3 `sshd -t` reporta erro de sintaxe após editar `sshd_config`
 Causa comum: diretiva duplicada, incompatível ou digitada incorretamente.
 Solução: sempre rodar `sudo sshd -t` antes de `systemctl reload sshd`. Se o teste falhar, o serviço antigo continua rodando na sessão atual — corrija o arquivo e teste novamente antes de recarregar.
-11.5 `Permission denied (publickey)` ao conectar com chave
+
+
+11.4 `Permission denied (publickey)` ao conectar com chave
 Causas possíveis e verificações:
 ls -ld ~/.ssh              # deve ser 700
 ls -l ~/.ssh/authorized_keys  # deve ser 600
 sudo restorecon -Rv ~/.ssh    # corrige contexto SELinux, se necessário
+
+
 ---
 12. Referências
 Documentação oficial do CentOS Stream: https://docs.centos.org/
