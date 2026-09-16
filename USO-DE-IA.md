@@ -149,3 +149,67 @@ Isso costuma acontecer quando os pontos de montagem são criados manualmente um 
 
 A correção consiste em criar /boot/efi (1 GiB) e /boot (1 GiB) explicitamente, alterando no painel de detalhes o campo "Tipo de dispositivo" de LVM para Partição Padrão, e mantendo a caixa "Criptografar" desmarcada nessas duas — mesmo com a opção global de criptografia ativa. Os demais 7 pontos de montagem permanecem como LVM e criptografados.
 
+## USO POR: Rafael
+
+##Instruções de como aplicar a lógica das análises e exemplos base
+
+#Prompts:
+Como descubro o status do SELinux num script shell?
+
+Resposta:
+Use o sestatus 2>/dev/null. O 2>/dev/null evita erros, caso não seja instalado. 
+
+#Prompt:
+E como sabber se está no modo enforcing?
+
+Resposta:
+
+#Você pode usar o grep -q "Current mode: .*enforcing". Use -q para mostrar apenas true ou false
+
+#Prompt:
+Como usar o comando findmnt para verificar as partições?
+
+Resposta:
+
+Utilize as opções -n -o OPTIONS<partição>. -n = remove cabeçalho e -o OPTIONS retorna as opções de montagem para verificar. Pode usar o | grep -q "<opção> para filtrar
+
+#Prompt
+Preciso verificar o status das permissões de alguns arquivos
+
+Resposta:
+Use stat -c "%a" <arquivo>. Isso retorna as permissões em formato octal. 
+
+#Prompt:
+Como listo todos os arquivos SUID do sistema num script shell?
+
+Resposta: Use find com -perm /4000:
+
+find / -xdev -perm /4000 -type f 2>/dev/null | sort
+
+O -xdev evita cruzar outros sistemas de arquivos, e 2>/dev/null suprime erros de permissão.
+ 
+
+ 
+#Prompt: 
+Como comparo essa lista com uma whitelist de SUIDs conhecidos?
+
+Resposta: 
+
+Leia o resultado linha por linha e use `grep -qx` para checar correspondência exata com a lista:
+
+if ! echo "$conhecidos" | grep -qx "$arquivo"; then
+    suspeitos="$suspeitos $arquivo"
+fi
+O -x exige que a linha inteira bata, evitando falsos positivos.
+ 
+#Prompt: 
+Como leio um arquivo linha por linha sem quebrar em espaços?
+
+Resposta:
+
+Use while IFS= read -r:
+
+while IFS= read -r arquivo; do
+done < "$TMPFILE"
+ 
+O IFS= evita que espaços quebrem a linha, e -r impede interpretação de barras invertidas.
