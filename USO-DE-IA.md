@@ -122,3 +122,19 @@ Bashcase "${1:-}" in
     *)
         ;;
 esac
+
+
+# Uso por: Gustavo Gomes
+
+
+Prompt:
+
+"Depois de criar os 7 pontos de montagem dentro do LVM, o instalador mostrou 12 GiB de espaço livre não alocado no grupo de volumes. Esse valor está dentro do esperado, considerando que o diagrama de referência usa números arredondados em GB?"
+
+Resposta:
+
+Sim, está dentro do esperado. A diferença vem da unidade: o esquema de referência do trabalho usa números arredondados em GB, enquanto o instalador (Anaconda) trabalha em GiB. São unidades distintas — 1 GiB equivale a aproximadamente 1,073 GB — então a soma dos volumes nunca bate exatamente com a conta feita em GB, e sempre sobra um pouco mais ou menos do que o número "redondo" sugere.
+
+O que realmente importa validar nesse ponto são três coisas: (1) os 7 pontos de montagem foram criados com os tamanhos previstos no diagrama; (2) sobrou espaço livre não alocado no Volume Group — o que não é desperdício, mas requisito explícito do trabalho, já que sem espaço livre no VG não é possível criar snapshots nem socorrer um volume que encheu; e (3) o disco não foi preenchido a 100%, situação que o próprio material do trabalho classifica como problema de planejamento, não otimização.
+
+
