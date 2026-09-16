@@ -1,7 +1,9 @@
 #!/bin/bash
 
+#A opção -euo permite que, em caso de erros, o script pare. Incluindo variáveis não encontrados.
 set -euo pipefail
 
+#As variáveis globais que serão usadas durante as funções e o código. 
 LOG="/var/log/cis-baseline-check.log"
 RELATORIO_HTML="/var/log/cis-baseline-check.html"
 PASSOU=0
@@ -11,6 +13,10 @@ PORCENTAGEM=0
 CONCEITO="D"
 TMPFILE=""
 
+#Lógica de criação de logs: 
+
+#Recebe dois argumentos, salva o primeiro em nívl e o segundo em mensagem, descobre a data com o comante date, formata, mostra na tela e adiciona no arquivo LOG
+
 criar_log(){
         local nivel="$1"
         local mensagem="$2"
@@ -19,12 +25,16 @@ criar_log(){
         echo "[$data] [$nivel] $mensagem" | tee -a "$LOG"
 }
 
+#Requisito: Usuário root. verificamos o EUID, e se não for 0, saímos do código. 
+
 usuario_root(){
         if [ "$EUID" -ne 0 ]; then
                 criar_log "ERRO" "Rode o script como root"
                 exit 3
         fi
 }
+
+#Uma lista simples de dependências, verificadas com uma função, e loga caso seja necessário
 
 verificar_deps(){
         for dep in sestatus ss find awk grep sshd systemctl sysctl stat rpm yum; do
@@ -36,19 +46,16 @@ verificar_deps(){
         criar_log "INFO" "Todas as dependências encontradas."
 }
 
+#Descobrimos os argumentos e imprimimos uma simples ajuda. Usamos match case para isso. 
+
 uso_help(){
-        echo "Uso: $0 [-h|--help]"
-        echo ""
-        echo "Script verificador de baseline CIS para CentOS Stream."
+        echo "Função: Verificador de baseline CIS para CentOS Stream."
         echo "Deve ser executado como root."
-        echo ""
         echo "Opções:"
         echo "  -h, --help    Mostra esta ajuda e sai"
-        echo ""
         echo "Saídas:"
-        echo "  Log:      $LOG"
-        echo "  HTML:     $RELATORIO_HTML"
-        echo ""
+        echo "  Log em:      $LOG"
+        echo "  HTML em:     $RELATORIO_HTML"
         echo "Códigos de saída:"
         echo "  0 — todas as verificações passaram"
         echo "  1 — uma ou mais verificações falharam"
@@ -70,13 +77,20 @@ case "${1:-}" in
                 ;;
 esac
 
+#Depois de ver se tem -h ou --help, podemos seguir com as verificações
 usuario_root
 verificar_deps
 
 TMPFILE=$(mktemp)
 trap 'rm -f "$TMPFILE"' EXIT
 
-criar_log "INFO" "Iniciando verificação de baseline CIS em $(hostname)..."
+criar_log "INFO" "Iniciando verificação de baseline CIS"
+
+#Lógica para todas as verificações são a mesma. 
+
+#Comando que verifica -> Joga o erro em /dev/null -> Grep no que nos interessa -> Compara com o que esperamos -> Define falha ou sucesso
+
+#Comando sestatus com filtro para descobrir se é enforcing e se é modo targeted; 
 
 ver_selinux(){
         if sestatus 2>/dev/null | grep -q "Current mode:.*enforcing"; then
@@ -99,6 +113,8 @@ ver_selinux_politica(){
                 FALHOU=$((FALHOU + 1))
         fi
 }
+
+#Verificação das opções de montagem com findmnt -n -o
 
 ver_tmp_nodev(){
         if findmnt -n -o OPTIONS /tmp 2>/dev/null | grep -q "nodev"; then
@@ -170,6 +186,8 @@ ver_varlog_noexec(){
         fi
 }
 
+#Systemctl para verificar o status de avahi, cups, nfs-server, rsyncd e telnet;
+
 ver_avahi(){
         if systemctl is-enabled avahi-daemon &>/dev/null; then
                 criar_log "ERRO" "Serviço avahi-daemon está habilitado — desative se não usar mDNS"
@@ -220,6 +238,8 @@ ver_telnet(){
         fi
 }
 
+#Stat -c, para ver a permissão dos arquivos shadow, passew, group e gshadow
+
 ver_shadow(){
         local perm
         perm=$(stat -c "%a" /etc/shadow 2>/dev/null)
@@ -267,6 +287,8 @@ ver_gshadow(){
                 FALHOU=$((FALHOU + 1))
         fi
 }
+
+#Criamos uma write list e usamos fing. Usamos o arquivo temporário para isso. 
 
 ver_suid(){
         local conhecidos suspeitos arquivo
@@ -331,6 +353,8 @@ ver_world_writable(){
         fi
 }
 
+#Rpm para ver se o audit esta instalado, com systemctl para ver se está ativo e tem acesso no boot
+
 ver_auditd_instalado(){
         if rpm -q audit &>/dev/null; then
                 criar_log "INFO" "auditd instalado"
@@ -361,6 +385,8 @@ ver_auditd_boot(){
         fi
 }
 
+#Verificaçao de updates disponíveis
+
 ver_updates(){
         local qtde
         qtde=$(yum check-update --quiet 2>/dev/null | grep -c "^[a-zA-Z]" || true)
@@ -385,6 +411,8 @@ ver_updates_seguranca(){
         fi
 }
 
+#Procuramos no valor do ssh as opções que precisamos. 
+
 ver_ssh_root(){
         local valor
         valor=$(sshd -T 2>/dev/null | grep "^permitrootlogin" | awk '{print $2}')
@@ -408,6 +436,8 @@ ver_ssh_maxauth(){
                 FALHOU=$((FALHOU + 1))
         fi
 }
+
+#Status do firewall com systemctl 
 
 ver_firewall(){
         if systemctl is-active firewalld &>/dev/null || systemctl is-active iptables &>/dev/null; then
@@ -455,6 +485,8 @@ ver_icmp_redirects(){
         fi
 }
 
+#Função simples, para pegar todos os valores e criar a nota. Atribuição dos conceitos as notas
+
 calcular_nota(){
         local total
         total=$((PASSOU + FALHOU + AVISO))
@@ -479,6 +511,8 @@ calcular_nota(){
         criar_log "INFO" "Avisos                : $AVISO"
         criar_log "INFO" "Score                 : $PORCENTAGEM% — Conceito $CONCEITO"
 }
+
+#Função que permite gerar o documento html
 
 gerar_html(){
         {
@@ -568,6 +602,8 @@ criar_log "INFO" "=== Kernel / sysctl ==="
 ver_ip_forward
 ver_aslr
 ver_icmp_redirects
+
+#Criar a nota e o html
 
 calcular_nota
 gerar_html
