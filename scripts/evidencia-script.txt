@@ -1,0 +1,68 @@
+Uso: /home/admin/cis-baseline-check.sh [-h|--help]
+
+Script verificador de baseline CIS para CentOS Stream.
+Deve ser executado como root.
+
+Opções:
+  -h, --help    Mostra esta ajuda e sai
+
+Saídas:
+  Log:      /var/log/cis-baseline-check.log
+  HTML:     /var/log/cis-baseline-check.html
+
+Códigos de saída:
+  0 — todas as verificações passaram
+  1 — uma ou mais verificações falharam
+  2 — erro de uso
+  3 — dependência ausente ou erro interno
+[2026-09-15 23:01:10] [INFO] Todas as dependências encontradas.
+[2026-09-15 23:01:10] [INFO] Iniciando verificação de baseline CIS em localhost.localdomain...
+[2026-09-15 23:01:10] [INFO] === SELinux ===
+[2026-09-15 23:01:10] [INFO] SELinux em modo Enforcing
+[2026-09-15 23:01:10] [INFO] Política SELinux carregada: targeted
+[2026-09-15 23:01:10] [INFO] === Montagens ===
+[2026-09-15 23:01:10] [INFO] /tmp montado com nodev
+[2026-09-15 23:01:10] [INFO] /tmp montado com noexec
+[2026-09-15 23:01:10] [INFO] /tmp montado com nosuid
+[2026-09-15 23:01:10] [INFO] /dev/shm montado com nodev
+[2026-09-15 23:01:10] [INFO] /home montado com nosuid
+[2026-09-15 23:01:10] [INFO] /var está em partição separada
+[2026-09-15 23:01:10] [INFO] /var/log montado com noexec
+[2026-09-15 23:01:10] [INFO] === Serviços desnecessários ===
+[2026-09-15 23:01:10] [INFO] Serviço avahi-daemon não está habilitado
+[2026-09-15 23:01:10] [INFO] Serviço cups não está habilitado
+[2026-09-15 23:01:10] [INFO] Serviço nfs-server não está habilitado
+[2026-09-15 23:01:10] [INFO] Serviço rsyncd não está habilitado
+[2026-09-15 23:01:11] [INFO] Pacote telnet-server não está instalado
+[2026-09-15 23:01:11] [INFO] === Permissões de arquivos ===
+[2026-09-15 23:01:11] [INFO] Permissões de /etc/shadow corretas: 0
+[2026-09-15 23:01:11] [INFO] Permissões de /etc/passwd corretas: 644
+[2026-09-15 23:01:11] [INFO] Permissões de /etc/group corretas: 644
+[2026-09-15 23:01:11] [INFO] Permissões de /etc/gshadow corretas: 0
+[2026-09-15 23:01:11] [INFO] === SUID / SGID / World-writable ===
+[2026-09-15 23:01:13] [INFO] Nenhum SUID suspeito encontrado
+[2026-09-15 23:01:13] [INFO] Quantidade de arquivos SGID aceitável: 2
+[2026-09-15 23:01:13] [INFO] Nenhum arquivo world-writable encontrado
+[2026-09-15 23:01:13] [INFO] === auditd ===
+[2026-09-15 23:01:13] [INFO] auditd instalado
+[2026-09-15 23:01:13] [INFO] auditd em execução
+[2026-09-15 23:01:13] [INFO] auditd habilitado no boot
+[2026-09-15 23:01:13] [INFO] === Atualizações ===
+[2026-09-15 23:01:15] [INFO] Nenhuma atualização pendente
+[2026-09-15 23:01:16] [INFO] Nenhuma atualização de segurança pendente
+[2026-09-15 23:01:16] [INFO] === SSH ===
+[2026-09-15 23:01:17] [INFO] Login root via SSH desabilitado
+[2026-09-15 23:01:17] [INFO] MaxAuthTries configurado para 3
+[2026-09-15 23:01:17] [INFO] === Firewall ===
+[2026-09-15 23:01:17] [INFO] Firewall ativo
+[2026-09-15 23:01:17] [INFO] === Kernel / sysctl ===
+[2026-09-15 23:01:18] [INFO] IP forwarding desabilitado
+[2026-09-15 23:01:19] [INFO] ASLR habilitado em nível 2
+[2026-09-15 23:01:19] [INFO] Envio de ICMP redirects desabilitado
+[2026-09-15 23:01:19] [INFO] ===== RESULTADO FINAL =====
+[2026-09-15 23:01:20] [INFO] Total de verificações : 32
+[2026-09-15 23:01:20] [INFO] Passaram              : 32
+[2026-09-15 23:01:20] [INFO] Falharam              : 0
+[2026-09-15 23:01:20] [INFO] Avisos                : 0
+[2026-09-15 23:01:20] [INFO] Score                 : 100% — Conceito A
+[2026-09-15 23:01:21] [INFO] Relatório HTML salvo em: /var/log/cis-baseline-check.html
