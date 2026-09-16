@@ -127,14 +127,25 @@ esac
 # Uso por: Gustavo Gomes
 
 
-Prompt:
+## Prompt:
 
 "Depois de criar os 7 pontos de montagem dentro do LVM, o instalador mostrou 12 GiB de espaço livre não alocado no grupo de volumes. Esse valor está dentro do esperado, considerando que o diagrama de referência usa números arredondados em GB?"
 
-Resposta:
+## Resposta:
 
 Sim, está dentro do esperado. A diferença vem da unidade: o esquema de referência do trabalho usa números arredondados em GB, enquanto o instalador (Anaconda) trabalha em GiB. São unidades distintas — 1 GiB equivale a aproximadamente 1,073 GB — então a soma dos volumes nunca bate exatamente com a conta feita em GB, e sempre sobra um pouco mais ou menos do que o número "redondo" sugere.
 
 O que realmente importa validar nesse ponto são três coisas: (1) os 7 pontos de montagem foram criados com os tamanhos previstos no diagrama; (2) sobrou espaço livre não alocado no Volume Group — o que não é desperdício, mas requisito explícito do trabalho, já que sem espaço livre no VG não é possível criar snapshots nem socorrer um volume que encheu; e (3) o disco não foi preenchido a 100%, situação que o próprio material do trabalho classifica como problema de planejamento, não otimização.
 
+## Prompt:
+
+"quando clico em Pronto no particionamento manual, o instalador retornou o erro Failed to find a suitable stage1 device: Partição de sistema EFI não pode ser do tipo lvmpv. oq esse erro significa?"
+
+## Resposta:
+
+Não é normal, mas é um erro comum de configuração e tem correção simples. A mensagem indica que o instalador tentou colocar a partição /boot/efi dentro do LVM, o que não é permitido: a partição de sistema EFI precisa ficar fora do LVM e fora da criptografia, porque o firmware UEFI precisa conseguir lê-la antes de o sistema operacional existir — ou seja, antes de haver qualquer possibilidade de solicitar a passphrase do LUKS.
+
+Isso costuma acontecer quando os pontos de montagem são criados manualmente um a um com o esquema LVM selecionado: o instalador tenta encaixar automaticamente a /boot/efi no mesmo esquema dos demais volumes.
+
+A correção consiste em criar /boot/efi (1 GiB) e /boot (1 GiB) explicitamente, alterando no painel de detalhes o campo "Tipo de dispositivo" de LVM para Partição Padrão, e mantendo a caixa "Criptografar" desmarcada nessas duas — mesmo com a opção global de criptografia ativa. Os demais 7 pontos de montagem permanecem como LVM e criptografados.
 
