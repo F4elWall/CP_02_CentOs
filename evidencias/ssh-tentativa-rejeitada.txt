@@ -1,0 +1,1 @@
+set 15 22:49:58 localhost.localdomain sshd-session[7125]: Connection reset by authenticating user admin 10.0.2.2 port 26232 [preauth]

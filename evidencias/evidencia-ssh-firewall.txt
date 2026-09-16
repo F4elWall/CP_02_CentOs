@@ -1,0 +1,152 @@
+port 2222
+addressfamily any
+listenaddress [::]:2222
+listenaddress 0.0.0.0:2222
+usepam yes
+pamservicename sshd
+logingracetime 30
+x11displayoffset 10
+x11maxdisplays 1000
+maxauthtries 3
+maxsessions 10
+clientaliveinterval 300
+clientalivecountmax 3
+requiredrsasize 2048
+streamlocalbindmask 0177
+unusedconnectiontimeout none
+permitrootlogin no
+ignorerhosts yes
+ignoreuserknownhosts no
+hostbasedauthentication no
+hostbasedusesnamefrompacketonly no
+pubkeyauthentication yes
+kerberosauthentication no
+kerberosorlocalpasswd yes
+kerberosticketcleanup yes
+kerberosuniqueccache no
+kerberosusekuserok yes
+gssapienablek5users no
+gssapiauthentication yes
+gssapicleanupcredentials no
+gssapidelegatecredentials yes
+gssapikeyexchange no
+gssapistrictacceptorcheck yes
+gssapistorecredentialsonrekey no
+gssapikexalgorithms gss-curve25519-sha256-,gss-nistp256-sha256-,gss-group14-sha256-,gss-group16-sha512-
+gssapiindicators none
+gssapiallows4u2self no
+passwordauthentication no
+kbdinteractiveauthentication no
+printmotd no
+printlastlog yes
+x11forwarding yes
+x11uselocalhost yes
+permittty yes
+permituserrc yes
+strictmodes yes
+tcpkeepalive yes
+permitemptypasswords no
+compression yes
+gatewayports no
+usedns no
+allowtcpforwarding yes
+allowagentforwarding yes
+disableforwarding no
+allowstreamlocalforwarding yes
+streamlocalbindunlink no
+fingerprinthash SHA256
+exposeauthinfo no
+refuseconnection no
+canonicalmatchuser no
+pidfile /var/run/sshd.pid
+modulifile /etc/ssh/moduli
+xauthlocation /usr/bin/xauth
+ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr
+macs hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,umac-128@openssh.com,hmac-sha2-512
+banner /etc/issue.net
+forcecommand none
+chrootdirectory none
+trustedusercakeys none
+revokedkeys none
+securitykeyprovider internal
+authorizedprincipalsfile none
+versionaddendum none
+authorizedkeyscommand none
+authorizedkeyscommanduser none
+authorizedprincipalscommand none
+authorizedprincipalscommanduser none
+hostkeyagent none
+kexalgorithms mlkem768x25519-sha256,mlkem768nistp256-sha256,mlkem1024nistp384-sha384,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
+casignaturealgorithms ecdsa-sha2-nistp256,sk-ecdsa-sha2-nistp256@openssh.com,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ssh-ed25519@openssh.com,rsa-sha2-256,rsa-sha2-512
+hostbasedacceptedalgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp256-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com
+hostkeyalgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp256-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com
+pubkeyacceptedalgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp256-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com
+sshdsessionpath /usr/libexec/openssh/sshd-session
+persourcepenaltyexemptlist none
+loglevel INFO
+syslogfacility AUTHPRIV
+authorizedkeysfile .ssh/authorized_keys
+hostkey /etc/ssh/ssh_host_rsa_key
+hostkey /etc/ssh/ssh_host_ecdsa_key
+hostkey /etc/ssh/ssh_host_ed25519_key
+allowgroups ssh-users
+authenticationmethods any
+channeltimeout none
+subsystem sftp /usr/libexec/openssh/sftp-server
+maxstartups 10:30:100
+persourcemaxstartups none
+persourcenetblocksize 32:128
+permittunnel no
+ipqos af21 cs1
+rekeylimit 0 0
+permitopen any
+permitlisten any
+permituserenvironment no
+pubkeyauthoptions none
+persourcepenalties crash:90 authfail:5 noauth:1 grace-exceeded:10 refuseconnection:10 max:600 min:15 max-sources4:65536 max-sources6:65536 overflow:permissive overflow6:permissive
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-09-15 22:45:44 -03; 15min ago
+ Invocation: c11001742c154786a3323f1d7a233d77
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 1293 (sshd)
+      Tasks: 1 (limit: 22193)
+     Memory: 6.1M (peak: 8.9M)
+        CPU: 763ms
+     CGroup: /system.slice/sshd.service
+             └─1293 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+set 15 22:47:26 localhost.localdomain sshd-session[7085]: pam_unix(sshd:session): session opened for user admin(uid=1000) by admin(uid=0)
+set 15 22:49:58 localhost.localdomain sshd-session[7125]: Connection reset by authenticating user admin 10.0.2.2 port 26232 [preauth]
+set 15 22:53:20 localhost.localdomain sshd-session[7156]: Postponed publickey for admin from 10.0.2.2 port 41412 ssh2 [preauth]
+set 15 22:53:20 localhost.localdomain sshd-session[7156]: Accepted publickey for admin from 10.0.2.2 port 41412 ssh2: ED25519 SHA256:1TG4gS5v7u0j7NR7xllRrFKkAoWSi8ry2d2voBglYOA
+set 15 22:53:20 localhost.localdomain sshd-session[7156]: pam_unix(sshd:session): session opened for user admin(uid=1000) by admin(uid=0)
+set 15 22:53:20 localhost.localdomain sshd-session[7156]: pam_unix(sshd:session): session closed for user admin
+set 15 22:53:40 localhost.localdomain sshd-session[7184]: Postponed publickey for admin from 10.0.2.2 port 41418 ssh2 [preauth]
+set 15 22:53:40 localhost.localdomain sshd-session[7184]: Accepted publickey for admin from 10.0.2.2 port 41418 ssh2: ED25519 SHA256:1TG4gS5v7u0j7NR7xllRrFKkAoWSi8ry2d2voBglYOA
+set 15 22:53:40 localhost.localdomain sshd-session[7184]: pam_unix(sshd:session): session opened for user admin(uid=1000) by admin(uid=0)
+set 15 22:53:41 localhost.localdomain sshd-session[7184]: pam_unix(sshd:session): session closed for user admin
+public (default, active)
+  target: default
+  ingress-priority: 0
+  egress-priority: 0
+  icmp-block-inversion: no
+  interfaces: enp0s3
+  sources: 
+  services: cockpit dhcpv6-client
+  ports: 2222/tcp
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	rule port port="2222" protocol="tcp" accept limit value="3/m"
+Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+udp   UNCONN 0      0          127.0.0.1:323       0.0.0.0:*   
+udp   UNCONN 0      0              [::1]:323          [::]:*   
+tcp   LISTEN 0      128          0.0.0.0:2222      0.0.0.0:*   
+tcp   LISTEN 0      128             [::]:2222         [::]:*   
+ssh_port_t                     tcp      2222, 22
