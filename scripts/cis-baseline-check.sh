@@ -88,7 +88,7 @@ criar_log "INFO" "Iniciando verificação de baseline CIS"
 
 #Lógica para todas as verificações são a mesma. 
 
-#Comando que verifica -> Joga o erro em /dev/null -> Grep no que nos interessa -> Compara com o que esperamos -> Define falha ou sucesso
+#Comando que verifica -> Joga possível erro em /dev/null -> Grep no que interessa -> Compara com o que esperamos -> Define falha ou sucesso
 
 #Comando sestatus com filtro para descobrir se é enforcing e se é modo targeted; 
 
